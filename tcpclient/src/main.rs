@@ -1,3 +1,4 @@
+use std::net::TcpStream;
 fn main() {
-    println!("Hello, world!");
+    let _stream = TcpStream::connect("localhost:3000").unwrap();
 }
