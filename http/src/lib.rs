@@ -1,14 +1,27 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+pub mod httprequest;
+
+#[derive(Debug, PartialEq)]
+pub enum Method {
+    GET,
+    POST,
+    Uninitialized,
+}
+impl From<&str> for Method {
+    fn from(meth_type: &str) -> Self {
+        match meth_type {
+            "GET" => Method::GET,
+            "POST" => Method::POST,
+            _ => Method::Uninitialized,
+        }
+    }
 }
 
 #[cfg(test)]
-mod tests {
+mod test {
     use super::*;
-
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn test_method_into() {
+        let m: Method = "GET".into();
+        assert_eq!(m, Method::GET);
     }
 }
