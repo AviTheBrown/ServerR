@@ -15,9 +15,6 @@ pub struct HttpRequest {
     pub msg_body: String,
 }
 
-// fn process_req_line(s: &str) -> (Method, Resource, Version) {}
-// fn process_header_line(s: &str) -> (String, String) {}
-
 impl From<String> for HttpRequest {
     fn from(req: String) -> Self {
         let mut parsed_method = Method::Uninitialized;
