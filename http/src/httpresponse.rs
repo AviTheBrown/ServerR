@@ -29,7 +29,7 @@ impl<'a> HttpResponse<'a> {
     ) -> HttpResponse<'a> {
         let mut response: HttpResponse<'a> = HttpResponse::default();
         if status_code != "200" {
-            response.status_code = status_code.;
+            response.status_code = status_code;
         };
         response.headers = match &headers {
             Some(_h) => headers,
@@ -39,12 +39,12 @@ impl<'a> HttpResponse<'a> {
                 Some(h)
             }
         };
-        response.status_code = match status_code {
-            "200" => "OK".into(),
-            "400" => "Bad Request".into(),
-            "404" => "Not Found".into(),
-            "500" => "Internal Server Error".into(),
-            _ => "Not Found".into(),
+        response.status_text = match status_code {
+            "200" => "OK",
+            "400" => "Bad Request",
+            "404" => "Not Found",
+            "500" => "Internal Server Error",
+            _ => "Not Found",
         };
         response.body = body;
         response
@@ -85,7 +85,7 @@ impl<'a> From<HttpResponse<'a>> for String {
     fn from(res: HttpResponse<'a>) -> Self {
         let res1 = res.clone();
         format!(
-            "{}{}{}\r\n{} Content-Lenght: {}\r\n\r\n{}",
+            "{} {} {}\r\n{} Content-Length: {} \r\n\r\n{}",
             &res1.version(),
             &res1.status_code(),
             &res1.status_text(),
@@ -93,5 +93,62 @@ impl<'a> From<HttpResponse<'a>> for String {
             &res1.body.as_ref().unwrap().len(),
             &res1.body()
         )
+    }
+}
+
+#[cfg(test)]
+mod test {
+
+    use super::*;
+    #[test]
+    fn test_response_struct_creation_200() {
+        let response_actual = HttpResponse::new("200", None, Some("this is a body text".into()));
+        let response_expected = HttpResponse {
+            version: "HTTP/1.1",
+            status_text: "OK",
+            status_code: "200",
+            headers: {
+                let mut hash = HashMap::new();
+                hash.insert("Content-Type", "text/html");
+                Some(hash)
+            },
+            body: Some("this is a body text".into()),
+        };
+        assert_eq!(response_actual, response_expected);
+    }
+    #[test]
+    fn test_http_response_crestion_400() {
+        let resposne_actual = HttpResponse::new("404", None, Some("this is a body text".into()));
+        let respsonse_expected = HttpResponse {
+            version: "HTTP/1.1",
+            status_code: "404",
+            status_text: "Not Found",
+            headers: {
+                let mut h = HashMap::new();
+                h.insert("Content-Type", "text/html");
+                Some(h)
+            },
+            body: Some("this is a body text".into()),
+        };
+
+        assert_eq!(respsonse_expected, resposne_actual);
+    }
+
+    #[test]
+    fn test_http_response_creation() {
+        let response_expected = HttpResponse {
+            version: "HTTP/1.1",
+            status_code: "404",
+            status_text: "Not Found",
+            headers: {
+                let mut h = HashMap::new();
+                h.insert("Content-Type", " text/html");
+                Some(h)
+            },
+            body: Some("this is a body text".into()),
+        };
+        let http_string: String = response_expected.into();
+        let response_actual= "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n Content-Length: 19 \r\n\r\nthis is a body text";
+        assert_eq!(response_actual, http_string);
     }
 }
