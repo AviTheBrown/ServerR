@@ -1,13 +1,10 @@
-use super::handler::{Handler, PageNotFound, StaticPageHandler, WebServerHandler};
-use std::io::prelude::*;
-use http::{Request, Response};
+use http::{http::HttpRequest, http::HttpResponse};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::env;
+use std::fs;
 
-pub struct Router; 
-
-impl Router {
-	pub fn route(req: HttpRequest, stream: &mut impl Write) -> () {
-		match req.method {
-			"GET" => 
-		}
-	}
+pub trait Handler {
+    fn handle(req: HttpRequest) -> HttpResponse;
+    fn load_file(file_name: &str) -> Option<String>;
 }

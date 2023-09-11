@@ -67,9 +67,9 @@ impl<'a> HttpResponse<'a> {
         self.status_text
     }
     fn headers(&self) -> String {
-        let hMap: HashMap<&str, &str> = self.headers.clone().unwrap();
+        let h_map: HashMap<&str, &str> = self.headers.clone().unwrap();
         let mut header_string: String = "".into();
-        for (k, v) in hMap.iter() {
+        for (k, v) in h_map.iter() {
             header_string = format!("{}{}:{}\r\n", header_string, k, v);
         }
         header_string
