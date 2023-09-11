@@ -1,6 +1,5 @@
 pub mod httprequest;
 pub mod httpresponse;
-use crate::httprequest::{HttpRequest, Resource};
 
 #[derive(Debug, PartialEq)]
 pub enum Method {
