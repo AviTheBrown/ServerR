@@ -1,4 +1,4 @@
-use http::{Method, Version};
+use crate::{Method, Version};
 use std::collections::HashMap;
 
 #[derive(Debug, PartialEq)]
