@@ -36,8 +36,9 @@ impl Router {
                     //     method: httprequest::Method::GET,
                     //     resource: httprequest::Resource::Path(GET./api/...),
                     // }
-                    // after spliting the second [1] element should be the path
+                    // after spliting the second [1] element should be the request route
                     match route[1] {
+                        // if its "api"
                         "api" => {
                             // invoke the WebServiceHandler function
                             // that is appropriate for the api in the path.
