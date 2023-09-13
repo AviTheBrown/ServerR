@@ -23,7 +23,7 @@ impl Router {
             // HttpRequest {
             //     method: Method::GET,
             // }
-            httprequest::Method::GET => match &req.resource {
+            http::Method::GET => match &req.resource {
                 // HttpRequest {
                 //     method: httprequest::Method::GET,
                 //     resource: httprequest::Resource::Path(path_string),
