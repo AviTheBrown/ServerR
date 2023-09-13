@@ -35,6 +35,8 @@ impl From<&str> for Version {
 mod test {
     use std::collections::HashMap;
 
+    use crate::httprequest::{HttpRequest, Resource};
+
     use super::*;
     #[test]
     fn test_method_into() {
