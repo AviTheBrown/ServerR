@@ -45,12 +45,12 @@ impl Router {
                             let resp: HttpResponse = WebServiceHandler::handle(&req);
                             // send back the the response to the stream
                             // which impl the Write trait
-                            let _ = resp.send_request(stream);
+                            let _ = resp.send_response(stream);
                         }
                         _ => {
                             // if there is no "api" being used or located in the path
                             let resp: HttpResponse = StaticPageHandler::handle(&req);
-                            let _ = resp.send_request(stream);
+                            let _ = resp.send_response(stream);
                         }
                     }
                 }
@@ -58,7 +58,7 @@ impl Router {
             _ => {
                 // if the request method is not GET
                 let resp: HttpResponse = PageNotFoundHandler::handle(&req);
-                let _ = resp.send_request(stream);
+                let _ = resp.send_response(stream);
             }
         }
     }
