@@ -35,6 +35,35 @@ pub struct StaticPageHandler;
 pub struct PageNotFoundHandler;
 pub struct WebServiceHandler;
 
+impl WebServiceHandler {
+    fn load_json() -> Vec<OrderStatus> {
+        // parent dir path
+        let default_path = format!("{}/data", env!("CARGO_MANIFEST_DIR"));
+        let data_path = env::var("DATA_PATH").unwrap_or(default_path);
+        let full_path = format!("{}/{}", data_path, "orders.json");
+        // covert the files path into a string
+        let json_contents = fs::read_to_string(full_path);
+        let orders: Vec<OrderStatus> =
+            serde_json::from_str(json_contents.unwrap().as_str()).unwrap();
+        orders
+    }
+}
+impl Handler for WebServiceHandler {
+    fn handle(req: &HttpRequest) -> HttpResponse {
+        let http::httprequest::Resource::Path(p) = &req.resource;
+        let route: Vec<&str> = p.split("/").collect();
+        // if path = ./apl/shopping/orders, return the json
+        match route[2] {
+            "shippiing" if route.len() > 2 && route[3] == "orders" => {
+                let body = Some(serde_json::to_string(&Self::load_json()).unwrap());
+                let mut headers: HashMap<&str, &str> = HashMap::new();
+                headers.insert("Content-Type", "application/json");
+                HttpResponse::new("202", Some(headers), body)
+            }
+            _ => HttpResponse::new("404", None, Self::load_file("404.html")),
+        }
+    }
+}
 impl Handler for PageNotFoundHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
         HttpResponse::new("404", None, Self::load_file("404.html"))
