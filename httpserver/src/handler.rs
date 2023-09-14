@@ -50,22 +50,22 @@ impl WebServiceHandler {
 }
 impl Handler for WebServiceHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
-        let http::httprequest::Resource::Path(p) = &req.resource;
-        let route: Vec<&str> = p.split("/").collect();
+        let http::httprequest::Resource::Path(s) = &req.resource;
+        let route: Vec<&str> = s.split('/').collect();
         // if path = ./apl/shopping/orders, return the json
         match route[2] {
-            "shippiing" if route.len() > 2 && route[3] == "orders" => {
+            "shipping" if route.len() > 2 && route[3] == "orders" => {
                 let body = Some(serde_json::to_string(&Self::load_json()).unwrap());
                 let mut headers: HashMap<&str, &str> = HashMap::new();
                 headers.insert("Content-Type", "application/json");
-                HttpResponse::new("202", Some(headers), body)
+                HttpResponse::new("200", Some(headers), body)
             }
             _ => HttpResponse::new("404", None, Self::load_file("404.html")),
         }
     }
 }
 impl Handler for PageNotFoundHandler {
-    fn handle(req: &HttpRequest) -> HttpResponse {
+    fn handle(_req: &HttpRequest) -> HttpResponse {
         HttpResponse::new("404", None, Self::load_file("404.html"))
     }
 }
@@ -73,7 +73,7 @@ impl Handler for StaticPageHandler {
     fn handle(req: &HttpRequest) -> HttpResponse {
         let http::httprequest::Resource::Path(s) = &req.resource;
         // Parse the Url
-        let route: Vec<&str> = s.split("/").collect();
+        let route: Vec<&str> = s.split('/').collect();
         match route[1] {
             "" => HttpResponse::new("200", None, Self::load_file("index.html")),
             "health" => HttpResponse::new("200", None, Self::load_file("health.html")),

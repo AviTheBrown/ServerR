@@ -13,9 +13,9 @@ pub struct HttpResponse<'a> {
 impl<'a> Default for HttpResponse<'a> {
     fn default() -> Self {
         Self {
-            version: "HTTP/1.1".into(),
-            status_code: "200".into(),
-            status_text: "OK".into(),
+            version: "HTTP/1.1",
+            status_code: "200",
+            status_text: "OK",
             headers: None,
             body: None,
         }

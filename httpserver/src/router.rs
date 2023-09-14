@@ -30,7 +30,7 @@ impl Router {
                 // }
                 httprequest::Resource::Path(path_string) => {
                     // parse the url
-                    let route: Vec<&str> = path_string.split("/").collect();
+                    let route: Vec<&str> = path_string.split('/').collect();
 
                     // HttpRequest {
                     //     method: httprequest::Method::GET,
